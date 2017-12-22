@@ -110,6 +110,7 @@ pipeline {
                         }
                     }          
                 }
+/*
                 stage("Tensorflow: CentOS7+Python3") {
                     steps { // FIXME we could have a conditional build here
                         script {
@@ -159,7 +160,7 @@ pipeline {
                         }
                     }                
                 }
-/*                stage("GCC 6.3.0: CentOS7") {
+                stage("GCC 6.3.0: CentOS7") {
                     steps { // FIXME we could have a conditional build here
                         script {
                             tagMap['gcc630-centos7'] = pipelineUtils.buildStableImage(OPENSHIFT_NAMESPACE, "gcc630-centos7")

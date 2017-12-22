@@ -31,15 +31,19 @@ def buildImageWithTag(String openshiftProject, String buildConfig, String tag) {
     openshift.withCluster() {
         openshift.withProject(openshiftProject) {
             def result = openshift.startBuild(buildConfig, "--wait")
-            def out = result.out.trim()
+            def buildName = result.out.trim()
             
-            echo "Resulting Build: " + out
+            echo "Resulting Build: " + buildName
 
-            def describeStr = openshift.selector(out).describe()
-            out = describeStr.out.trim()
+            def describeStr = openshift.selector(buildName).describe()
+            buildName = describeStr.buildName.trim()
+
+            def buildLog = openshift.getBuildPodLogs(buildConfig)
+
+            echo "BuildLog: " + buildLog
 
             def imageHash = sh(
-                    script: "echo \"${out}\" | grep 'Image Digest:' | cut -f2- -d:",
+                    script: "echo \"${buildName}\" | grep 'Image Digest:' | cut -f2- -d:",
                     returnStdout: true
             ).trim()
             echo "imageHash: ${imageHash}"
